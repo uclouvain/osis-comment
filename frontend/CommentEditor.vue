@@ -52,7 +52,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import CKEditor from 'ckeditor4-vue';
 
 export default {
@@ -63,7 +63,7 @@ export default {
   props: {
     richTextConfig: {
       type: Object,
-      default: () => {},
+      default: () => undefined,
     },
     defaultValue: {
       type: String,

@@ -40,7 +40,7 @@ export default class Entry {
   /** @type {{ edit: String, delete: String}} */
   links;
 
-  constructor ({ created_at, ...entry }) {
+  constructor({created_at, ...entry}) {
     Object.assign(this, entry);
     this.created_at = new Date(created_at);
   }

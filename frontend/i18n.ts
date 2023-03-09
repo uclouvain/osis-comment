@@ -23,11 +23,7 @@
  *   see http://www.gnu.org/licenses/.
  *
  */
-
-import Vue from 'vue';
-import VueI18n from 'vue-i18n';
-
-Vue.use(VueI18n);
+import {createI18n} from 'vue-i18n';
 
 const messages = {
   en: {
@@ -71,7 +67,8 @@ const messages = {
     request_error: "Erreur HTTP: {error}",
   },
 };
-export const i18n = new VueI18n({
+
+export const i18n = createI18n({
   locale: document.documentElement.lang || 'en',
   messages,
 });

@@ -93,7 +93,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import CommentEntry from './components/CommentEntry.vue';
 import Entry from './entry';
 import CommentEditor from './CommentEditor.vue';
@@ -131,6 +131,7 @@ export default {
     if (this.tags) {
       params.append('tags', this.tags.join(','));
     }
+    const element: HTMLInputElement = document.querySelector('[name=csrfmiddlewaretoken]');
     return {
       entries: [],
       error: '',
@@ -141,7 +142,7 @@ export default {
       nextPage: null,
       loading: true,
       isAdding: false,
-      csrfToken: document.querySelector('[name=csrfmiddlewaretoken]').value,
+      csrfToken: element.value,
     };
   },
   computed: {

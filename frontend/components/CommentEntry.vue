@@ -78,7 +78,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Entry from '../entry';
 import CommentEditor from '../CommentEditor.vue';
 
@@ -88,11 +88,11 @@ export default {
   props: {
     richTextConfig: {
       type: Object,
-      default: () => {},
+      default: () => undefined,
     },
     entry: {
       type: Entry,
-      default: () => {},
+      default: () => undefined,
     },
   },
   data: function () {

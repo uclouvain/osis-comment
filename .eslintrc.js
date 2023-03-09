@@ -28,57 +28,42 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    'jest/globals': true,
+    'jest/globals': true
   },
-  extends: [
-    'plugin:vue/recommended',
-    'eslint:recommended',
-    'plugin:jest/recommended',
-  ],
-  overrides: [
-    { files: '*.{vue,.test.js}' },
-    {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)',
-      ],
-      env: {
-        jest: true,
-      },
-    },
-    {
-      files: [
-        'vue.config.js',
-        '.eslintrc.js',
-      ],
-      env: {
-        node: true,
-      },
-    },
-  ],
+  extends: ['plugin:vue/recommended', 'eslint:recommended', 'plugin:jest/recommended', 'plugin:@typescript-eslint/recommended', '@vue/typescript/recommended', 'plugin:storybook/recommended'],
+  overrides: [{
+    files: '*.{vue,.test.js}'
+  }, {
+    files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
+    env: {
+      jest: true
+    }
+  }, {
+    files: ['vue.config.js', '.eslintrc.js'],
+    env: {
+      node: true
+    }
+  }],
+  ignorePatterns: ['osis_comment/static/**/*.js'],
   globals: {
     jQuery: 'readonly',
-    process: 'readonly',
+    process: 'readonly'
   },
   parserOptions: {
     ecmaVersion: 2021,
-    sourceType: 'module',
-    parser: '@babel/eslint-parser',
+    sourceType: 'module'
   },
-  plugins: [
-    'vue',
-    'jest',
-  ],
+  plugins: ['vue', 'jest', '@typescript-eslint'],
   rules: {
     'vue/html-indent': ['error', 2, {
-      attribute: 2,
+      attribute: 2
     }],
     'comma-dangle': ['error', 'always-multiline'],
     semi: ['error', 'always'],
     eqeqeq: ['error', 'always'],
     'prefer-const': ['error', {
       destructuring: 'any',
-      ignoreReadBeforeAssign: false,
-    }],
-  },
+      ignoreReadBeforeAssign: false
+    }]
+  }
 };

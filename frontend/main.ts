@@ -23,26 +23,22 @@
  *   see http://www.gnu.org/licenses/.
  *
  */
-import Vue from 'vue';
-import { i18n } from './i18n';
+import {createApp} from 'vue';
+import {i18n} from './i18n';
 import CommentThread from './CommentThread.vue';
 
-function initCommentComponents () {
-  document.querySelectorAll('.comment-viewer').forEach((elem) => {
-    const props = { ...elem.dataset };
-    if (typeof props.pageSize !== 'undefined') {
-      props.pageSize = Number.parseInt(props.pageSize);
+function initCommentComponents() {
+  document.querySelectorAll('.comment-viewer:not([data-v-app])').forEach((elem) => {
+    if (elem instanceof HTMLElement) {
+      const props = {...elem.dataset};
+      if (typeof props.pageSize !== 'undefined') {
+        props.pageSize = Number.parseInt(props.pageSize);
+      }
+      if (typeof props.tags !== 'undefined') {
+        props.tags = props.tags.split(',');
+      }
+      createApp(CommentThread, props).use(i18n).mount(elem);
     }
-    if (typeof props.tags !== 'undefined') {
-      props.tags = props.tags.split(',');
-    }
-    if (typeof props.richTextConfig !== 'undefined') {
-      props.richTextConfig = props.richTextConfig === 'true';
-    }
-    new Vue({
-      render: (h) => h(CommentThread, { props }),
-      i18n,
-    }).$mount(elem);
   });
 }
 
@@ -51,4 +47,4 @@ initCommentComponents();
 
 // Initialize later if nodes are added dynamically
 const observer = new MutationObserver(initCommentComponents);
-observer.observe(document, { childList: true, subtree: true });
+observer.observe(document, {childList: true, subtree: true});
