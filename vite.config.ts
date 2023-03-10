@@ -49,6 +49,7 @@ export default defineConfig({
         "frontend/.storybook",
         "frontend/**/*.stories.{ts,js}",
       ],
+      reporter: ['text', 'json'],
       // reporter: ['text', 'html'],
     },
   },
