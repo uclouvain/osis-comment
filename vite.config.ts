@@ -42,6 +42,13 @@ export default defineConfig({
     setupFiles: ['frontend/test.setup.ts'],
     coverage: {
       provider: 'istanbul',
+      all: true,
+      include: ['frontend'],
+      exclude: [
+        "frontend/node_modules/",
+        "frontend/.storybook",
+        "frontend/**/*.stories.{ts,js}",
+      ],
       // reporter: ['text', 'html'],
     },
   },
