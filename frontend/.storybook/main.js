@@ -1,16 +1,24 @@
 module.exports = {
   stories: [
-    "../**/*.stories.@(js|jsx|ts|tsx)"
+    '../**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
+    '@storybook/addon-essentials',
   ],
-  framework: "@storybook/vue3",
+  framework: '@storybook/vue3',
   core: {
-    "builder": "@storybook/builder-vite"
+    'builder': '@storybook/builder-vite',
+  },
+  async viteFinal (config) {
+    // Merge custom configuration into the default config
+    return {
+      ...config,
+      build: {
+        sourcemap: false,
+      },
+    };
   },
   features: {
-    "storyStoreV7": true
-  }
-}
+    'storyStoreV7': true,
+  },
+};

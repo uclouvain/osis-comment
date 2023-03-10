@@ -23,25 +23,4 @@
  * see http://www.gnu.org/licenses/.
  *
  */
-
-export default class Entry {
-  /** @type {String} */
-  uuid;
-  /** @type {String} */
-  comment;
-  /** @type {Date} */
-  created_at;
-  /** @type {String} */
-  author;
-  /** @type {String[]} */
-  tags;
-  /** @type Object */
-  extra_data;
-  /** @type {{ edit: String, delete: String}} */
-  links;
-
-  constructor({created_at, ...entry}) {
-    Object.assign(this, entry);
-    this.created_at = new Date(created_at);
-  }
-}
+declare module '@mayasabha/ckeditor4-vue3';

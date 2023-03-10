@@ -27,15 +27,21 @@ import {createApp} from 'vue';
 import {i18n} from './i18n';
 import CommentThread from './CommentThread.vue';
 
+interface Props extends Record<string, unknown> {
+  url: string,
+  pageSize?: number,
+  tags?: string[],
+}
+
 function initCommentComponents() {
   document.querySelectorAll('.comment-viewer:not([data-v-app])').forEach((elem) => {
     if (elem instanceof HTMLElement) {
-      const props = {...elem.dataset};
-      if (typeof props.pageSize !== 'undefined') {
-        props.pageSize = Number.parseInt(props.pageSize);
+      const props: Props = {url: "", ...elem.dataset};
+      if (typeof elem.dataset.pageSize !== 'undefined') {
+        props.pageSize = Number.parseInt(elem.dataset.pageSize);
       }
-      if (typeof props.tags !== 'undefined') {
-        props.tags = props.tags.split(',');
+      if (typeof elem.dataset.tags !== 'undefined') {
+        props.tags = elem.dataset.tags.split(',');
       }
       createApp(CommentThread, props).use(i18n).mount(elem);
     }

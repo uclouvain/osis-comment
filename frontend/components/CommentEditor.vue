@@ -23,7 +23,6 @@
   - see http://www.gnu.org/licenses/.
   -
   -->
-
 <template>
   <div>
     <textarea
@@ -37,28 +36,31 @@
         v-model="value"
         :config="richTextConfig"
     />
-    <button
-        class="btn btn-success"
-        @click="$emit('submit', value)"
-    >
-      {{ $t('entry.submit_comment') }}
-    </button>
-    <button
-        class="btn btn-default"
-        @click="$emit('cancel')"
-    >
-      {{ $t('entry.cancel_edit') }}
-    </button>
+    <div class="text-right">
+      <button
+          class="btn btn-sm btn-success"
+          @click="$emit('submit', value)"
+      >
+        {{ $t('entry.submit_comment') }}
+      </button>
+      <button
+          class="btn btn-sm btn-default"
+          @click="$emit('cancel')"
+      >
+        {{ $t('entry.cancel_edit') }}
+      </button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import CKEditor from 'ckeditor4-vue';
+import {component} from '@mayasabha/ckeditor4-vue3';
+import { defineComponent} from 'vue';
 
-export default {
+export default defineComponent({
   name: 'CommentEditor',
   components: {
-    ckeditor: CKEditor.component,
+    ckeditor: component,
   },
   props: {
     richTextConfig: {
@@ -70,10 +72,11 @@ export default {
       default: '',
     },
   },
+  emits: ['cancel', 'submit'],
   data: function () {
     return {
       value: this.defaultValue,
     };
   },
-};
+});
 </script>

@@ -26,32 +26,32 @@
 
 <template>
   <div class="panel-body clearfix">
+    <div class="comment-authoring">
+      <strong>{{ entry.author || $t('entry.anonymous') }}</strong>
+      {{
+        $t('entry.authored_date', {
+          date: entry.created_at.toLocaleDateString(),
+          time: entry.created_at.toLocaleTimeString(),
+        })
+      }}
+    </div>
     <template v-if="!isEditing">
-      <div class="comment-authoring bg-info">
-        <strong>{{ entry.author || $t('entry.anonymous') }}</strong>
-        {{
-          $t('entry.authored_date', {
-            date: entry.created_at.toLocaleDateString(),
-            time: entry.created_at.toLocaleTimeString(),
-          })
-        }}
-      </div>
       <div class="pull-right comment-actions">
         <button
-            v-if="entry.links.edit"
+            v-if="typeof entry.links.edit === 'string'"
             class="btn btn-sm btn-default"
+            :title="$t('entry.edit_comment')"
             @click="isEditing = true"
         >
           <i class="fas fa-pencil" />
-          {{ $t('entry.edit_comment') }}
         </button>
         <button
-            v-if="entry.links.delete"
-            class="btn btn-sm btn-default"
+            v-if="typeof entry.links.delete === 'string'"
+            class="btn btn-sm btn-danger"
+            :title="$t('entry.delete_comment')"
             @click="$emit('delete', entry.links.delete)"
         >
-          <i class="fas fa-trash-alt text-danger" />
-          {{ $t('entry.delete_comment') }}
+          <i class="fas fa-trash-alt" />
         </button>
       </div>
       <div
@@ -59,7 +59,7 @@
           class="comment-content"
       >
         <!-- eslint-disable vue/no-v-html -->
-        <p v-html="entry.comment.replaceAll('\n', '<br/>')" />
+        <p v-html="entry.comment.replace(/\n/g, '<br/>')" />
       </div>
       <!-- eslint-disable vue/no-v-html -->
       <div
@@ -79,12 +79,13 @@
 </template>
 
 <script lang="ts">
-import Entry from '../entry';
-import CommentEditor from '../CommentEditor.vue';
+import {Entry} from '../types';
+import CommentEditor from './CommentEditor.vue';
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'CommentEntry',
-  components: { CommentEditor },
+  components: {CommentEditor},
   props: {
     richTextConfig: {
       type: Object,
@@ -92,21 +93,28 @@ export default {
     },
     entry: {
       type: Entry,
-      default: () => undefined,
+      required: true,
     },
   },
+  emits: ['edit', 'delete'],
   data: function () {
     return {
       isEditing: false,
     };
   },
-};
+});
 </script>
 
 <style>
+.comment-authoring {
+  background: #dddddd;
+  padding: .5em 1em;
+}
+
 .comment-content {
   padding: 1em 0;
 }
+
 .comment-actions {
   padding: 4px 0;
 }
