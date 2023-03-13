@@ -36,7 +36,7 @@
           @click="changeSort()"
       >
         {{ $t('thread.sort') }}
-        <span
+        <i
             class="fas"
             :class="isAscendedSort ? 'fa-sort-up' : 'fa-sort-down'"
         />
@@ -61,13 +61,13 @@
         @delete="deleteEntry"
     />
     <div
-        v-if="nextPage || previousPage|| createUrl"
+        v-if="nextPage || previousPage || createUrl"
         class="panel-body"
     >
       <button
           v-if="previousPage"
           class="btn btn-sm btn-default"
-          @click="currentUrl = previousPage || currentUrl; loadEntries()"
+          @click="previousPage && (currentUrl = previousPage); loadEntries()"
       >
         <i class="fas fa-chevron-left" />
         {{ $t('thread.previous') }}
@@ -75,7 +75,7 @@
       <button
           v-if="nextPage"
           class="btn btn-sm btn-default"
-          @click="currentUrl = nextPage|| currentUrl; loadEntries()"
+          @click="nextPage && (currentUrl = nextPage); loadEntries()"
       >
         {{ $t('thread.next') }}
         <i class="fas fa-chevron-right" />
@@ -145,7 +145,7 @@ export default defineComponent({
       limit: String(this.pageSize),
       sort: '-created',
     });
-    if (this.tags) {
+    if (this.tags.length) {
       params.append('tags', this.tags.join(','));
     }
     const element = document.querySelector('[name=csrfmiddlewaretoken]');
@@ -183,29 +183,19 @@ export default defineComponent({
       await this.loadEntries();
     },
     async loadEntries() {
-      try {
-        const response = await fetch(this.currentUrl);
-        if (response.status === 200) {
-          const data = await response.json() as EntriesResponse;
-          this.createUrl = typeof data.create === 'string' ? data.create : null;
-          this.previousPage = data.previous;
-          this.nextPage = data.next;
-          this.entries = data.results.map(r => new Entry(r));
-        } else {
-          this.error = response.statusText;
-        }
-      } catch (e) {
-        this.error = (e as Error).message;
+      const data = (await this.doRequest(this.currentUrl, {}, false)) as EntriesResponse;
+      if (data) {
+        this.createUrl = typeof data.create === 'string' ? data.create : null;
+        this.previousPage = data.previous;
+        this.nextPage = data.next;
+        this.entries = data.results.map(r => new Entry(r));
       }
-      this.loading = false;
     },
     async createEntry(value: string) {
-      if (this.createUrl) {
-        await this.doRequest(this.createUrl, {
-          method: 'POST',
-          body: JSON.stringify({comment: value, tags: this.tags}),
-        });
-      }
+      await this.doRequest(this.createUrl as string, {
+        method: 'POST',
+        body: JSON.stringify({comment: value, tags: this.tags}),
+      });
       this.isAdding = false;
     },
     async editEntry(url: string, value: string) {
@@ -217,7 +207,7 @@ export default defineComponent({
     async deleteEntry(url: string) {
       await this.doRequest(url, {method: 'DELETE'});
     },
-    async doRequest(url: string, params: object) {
+    async doRequest(url: string, params: object, refresh = true) {
       this.loading = true;
       try {
         const response = await fetch(url, {
@@ -229,7 +219,11 @@ export default defineComponent({
           ...params,
         });
         if (response.status >= 200 && response.status < 300) {
-          await this.loadEntries();
+          if (refresh) {
+            await this.loadEntries();
+          }
+          this.loading = false;
+          return response.json();
         } else {
           this.error = response.statusText;
         }

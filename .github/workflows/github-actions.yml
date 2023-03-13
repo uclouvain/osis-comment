@@ -1,4 +1,4 @@
-name: Django Tests CI
+name: Frontend
 
 on:
   pull_request:
@@ -22,11 +22,41 @@ jobs:
 #        run: |
 #          python manage.py test osis_comment
 
-  tests_front:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Cache npm dependencies
+      uses: actions/cache@v2
+      with:
+        path: '~/.npm'
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14.x
+
+    - run: npm install
+    - run: npm run lint
+
+  tests_coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Cache npm dependencies
+      uses: actions/cache@v2
+      with:
+        path: '~/.npm'
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
 
     - name: Use Node.js
       uses: actions/setup-node@v3
@@ -36,6 +66,4 @@ jobs:
     - run: |
         npm install
         npm install coveralls
-    - run: npm run lint
     - run: npm run coverage
-    - run: coveralls < coverage/lcov.info

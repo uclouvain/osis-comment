@@ -23,7 +23,7 @@
  *   see http://www.gnu.org/licenses/.
  *
  */
-import {createApp} from 'vue';
+import {createApp} from '@vue/runtime-dom'; // not importing from 'vue' so it can be spied on
 import {i18n} from './i18n';
 import CommentThread from './CommentThread.vue';
 
@@ -34,17 +34,15 @@ interface Props extends Record<string, unknown> {
 }
 
 function initCommentComponents() {
-  document.querySelectorAll('.comment-viewer:not([data-v-app])').forEach((elem) => {
-    if (elem instanceof HTMLElement) {
-      const props: Props = {url: "", ...elem.dataset};
-      if (typeof elem.dataset.pageSize !== 'undefined') {
-        props.pageSize = Number.parseInt(elem.dataset.pageSize);
-      }
-      if (typeof elem.dataset.tags !== 'undefined') {
-        props.tags = elem.dataset.tags.split(',');
-      }
-      createApp(CommentThread, props).use(i18n).mount(elem);
+  document.querySelectorAll<HTMLElement>('.comment-viewer:not([data-v-app])').forEach((elem) => {
+    const props: Props = {url: "", ...elem.dataset};
+    if (typeof elem.dataset.pageSize !== 'undefined') {
+      props.pageSize = Number.parseInt(elem.dataset.pageSize);
     }
+    if (typeof elem.dataset.tags !== 'undefined') {
+      props.tags = elem.dataset.tags.split(',');
+    }
+    createApp(CommentThread, props).use(i18n).mount(elem);
   });
 }
 

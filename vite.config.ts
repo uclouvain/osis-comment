@@ -43,14 +43,15 @@ export default defineConfig({
     coverage: {
       provider: 'istanbul',
       all: true,
+      perFile: true,
+      branches: 100,
+      statements: 100,
       include: ['frontend'],
       exclude: [
         "frontend/node_modules/",
         "frontend/.storybook",
         "frontend/**/*.stories.{ts,js}",
       ],
-      reporter: ['text', 'json'],
-      // reporter: ['text', 'html'],
     },
   },
 });
