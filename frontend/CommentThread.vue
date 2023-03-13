@@ -25,7 +25,10 @@
   -->
 
 <template>
-  <div class="comment-thread panel panel-primary">
+  <div
+      class="comment-thread panel"
+      :class="`panel-${panelClass}`"
+  >
     <div class="panel-heading clearfix">
       {{ headerTitle || $t('thread.title') }}
       <button
@@ -33,7 +36,7 @@
           @click="changeSort()"
       >
         {{ $t('thread.sort') }}
-        <span
+        <i
             class="fas"
             :class="isAscendedSort ? 'fa-sort-up' : 'fa-sort-down'"
         />
@@ -43,12 +46,12 @@
         v-if="loading"
         class="spinner"
     />
-    <span
+    <div
         v-else-if="error"
-        class="text-danger"
+        class="panel-body text-danger"
     >
       {{ error }}
-    </span>
+    </div>
     <CommentEntry
         v-for="entry in entries"
         v-else
@@ -57,11 +60,14 @@
         @edit="editEntry"
         @delete="deleteEntry"
     />
-    <div class="panel-body">
+    <div
+        v-if="nextPage || previousPage || createUrl"
+        class="panel-body"
+    >
       <button
           v-if="previousPage"
           class="btn btn-sm btn-default"
-          @click="currentUrl = previousPage; loadEntries()"
+          @click="previousPage && (currentUrl = previousPage); loadEntries()"
       >
         <i class="fas fa-chevron-left" />
         {{ $t('thread.previous') }}
@@ -69,7 +75,7 @@
       <button
           v-if="nextPage"
           class="btn btn-sm btn-default"
-          @click="currentUrl = nextPage; loadEntries()"
+          @click="nextPage && (currentUrl = nextPage); loadEntries()"
       >
         {{ $t('thread.next') }}
         <i class="fas fa-chevron-right" />
@@ -77,14 +83,15 @@
       <template v-if="createUrl">
         <button
             v-if="!isAdding"
-            class="btn btn-sm btn-default pull-right"
+            class="btn btn-sm btn-primary pull-right"
             @click="isAdding = !isAdding"
         >
-          <i class="fas fa-plus text-success" />
+          <i class="fas fa-plus" />
           {{ $t('thread.add_comment') }}
         </button>
         <CommentEditor
             v-else
+            :rich-text-config="richTextConfig"
             @submit="createEntry"
             @cancel="isAdding = !isAdding"
         />
@@ -93,14 +100,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import CommentEntry from './components/CommentEntry.vue';
-import Entry from './entry';
-import CommentEditor from './CommentEditor.vue';
+import {Entry} from './types';
+import type {EntriesResponse} from './interfaces';
+import CommentEditor from './components/CommentEditor.vue';
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'CommentThread',
-  components: { CommentEditor, CommentEntry },
+  components: {CommentEditor, CommentEntry},
   props: {
     url: {
       type: String,
@@ -122,38 +131,50 @@ export default {
       type: String,
       default: '-created',
     },
+    panelClass: {
+      type: String,
+      default: 'default',
+    },
+    richTextConfig: {
+      type: Object,
+      default: () => undefined,
+    },
   },
-  data () {
+  data() {
     const params = new URLSearchParams({
-      limit: this.pageSize,
+      limit: String(this.pageSize),
       sort: '-created',
     });
-    if (this.tags) {
+    if (this.tags.length) {
       params.append('tags', this.tags.join(','));
     }
+    const element = document.querySelector('[name=csrfmiddlewaretoken]');
+    if (!(element instanceof HTMLInputElement)) {
+      throw new Error('Please include {% csrf_token %} in your page.');
+    }
     return {
-      entries: [],
+      entries: [] as Entry[],
       error: '',
-      createUrl: '',
+      createUrl: null as string | null,
       currentUrl: `${this.url}?${params.toString()}`,
       currentSort: '-created',
-      previousPage: null,
-      nextPage: null,
+      previousPage: null as string | null,
+      nextPage: null as string | null,
       loading: true,
       isAdding: false,
-      csrfToken: document.querySelector('[name=csrfmiddlewaretoken]').value,
+      csrfToken: element.value,
     };
   },
   computed: {
-    isAscendedSort: function () {
+    isAscendedSort: function (): boolean {
       return this.currentSort === 'created';
     },
   },
-  async mounted () {
-    await this.loadEntries();
+  mounted() {
+    void this.loadEntries();
   },
   methods: {
-    async changeSort () {
+    async changeSort() {
       const url = new URL(window.location.origin + this.currentUrl);
       const params = new URLSearchParams(url.search);
       this.currentSort = this.isAscendedSort ? '-created' : 'created';
@@ -161,40 +182,32 @@ export default {
       this.currentUrl = `${url.pathname}?${params.toString()}`;
       await this.loadEntries();
     },
-    async loadEntries () {
-      try {
-        const response = await fetch(this.currentUrl);
-        if (response.status === 200) {
-          const data = await response.json();
-          this.createUrl = data.create;
-          this.previousPage = data.previous;
-          this.nextPage = data.next;
-          this.entries = data.results.map(e => new Entry(e));
-        } else {
-          this.error = response.statusText;
-        }
-      } catch (e) {
-        this.error = e;
+    async loadEntries() {
+      const data = (await this.doRequest(this.currentUrl, {}, false)) as EntriesResponse;
+      if (data) {
+        this.createUrl = typeof data.create === 'string' ? data.create : null;
+        this.previousPage = data.previous;
+        this.nextPage = data.next;
+        this.entries = data.results.map(r => new Entry(r));
       }
-      this.loading = false;
     },
-    async createEntry (value) {
-      await this.doRequest(this.createUrl, {
+    async createEntry(value: string) {
+      await this.doRequest(this.createUrl as string, {
         method: 'POST',
-        body: JSON.stringify({ comment: value, tags: this.tags }),
+        body: JSON.stringify({comment: value, tags: this.tags}),
       });
       this.isAdding = false;
     },
-    async editEntry (url, value) {
+    async editEntry(url: string, value: string) {
       await this.doRequest(url, {
         method: 'PUT',
-        body: JSON.stringify({ comment: value }),
+        body: JSON.stringify({comment: value}),
       });
     },
-    async deleteEntry (url) {
-      await this.doRequest(url, { method: 'DELETE' });
+    async deleteEntry(url: string) {
+      await this.doRequest(url, {method: 'DELETE'});
     },
-    async doRequest (url, request) {
+    async doRequest(url: string, params: object, refresh = true) {
       this.loading = true;
       try {
         const response = await fetch(url, {
@@ -203,32 +216,28 @@ export default {
             'Content-Type': 'application/json;charset=utf-8',
             'X-CSRFToken': this.csrfToken,
           },
-          ...request,
+          ...params,
         });
         if (response.status >= 200 && response.status < 300) {
-          await this.loadEntries();
+          if (refresh) {
+            await this.loadEntries();
+          }
+          this.loading = false;
+          return response.json();
         } else {
           this.error = response.statusText;
         }
       } catch (e) {
-        this.error = e;
+        this.error = (e as Error).message;
       }
       this.loading = false;
     },
   },
-};
+});
 </script>
 
 <style>
 .comment-thread .panel-heading {
   line-height: 30px;
-}
-
-.comment-thread .panel-body {
-  border-bottom: 1px solid #ddd;
-}
-
-.comment-thread .panel-body:last-child {
-  border-bottom: none;
 }
 </style>

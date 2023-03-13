@@ -25,50 +25,48 @@
  */
 
 module.exports = {
+  root: true,
   env: {
     browser: true,
     es2021: true,
-    'jest/globals': true,
   },
   extends: [
-    'plugin:vue/recommended',
     'eslint:recommended',
-    'plugin:jest/recommended',
+    'plugin:vue/vue3-recommended',
+    'plugin:@typescript-eslint/recommended',
+    // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    '@vue/typescript/recommended',
+    'plugin:storybook/recommended',
   ],
-  overrides: [
-    { files: '*.{vue,.test.js}' },
-    {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)',
-      ],
-      env: {
-        jest: true,
-      },
+  overrides: [{
+    files: ['.eslintrc.js'],
+    extends: ['eslint:recommended'],
+    env: {
+      node: true,
     },
-    {
-      files: [
-        'vue.config.js',
-        '.eslintrc.js',
-      ],
-      env: {
-        node: true,
-      },
+  }, {
+    files: ['vite.config.ts', 'frontend/.storybook/main.ts'],
+    extends: ['eslint:recommended'],
+    parserOptions: {
+      project: ['./tsconfig.vite.json'],
     },
-  ],
+    env: {
+      node: true,
+    },
+  }],
+  ignorePatterns: ['osis_comment/static/**/*.js'],
   globals: {
     jQuery: 'readonly',
-    process: 'readonly',
   },
+  parser: 'vue-eslint-parser',
   parserOptions: {
+    parser: '@typescript-eslint/parser',
+    project: ['./tsconfig.json'],
+    tsconfigRootDir: __dirname,
     ecmaVersion: 2021,
     sourceType: 'module',
-    parser: '@babel/eslint-parser',
   },
-  plugins: [
-    'vue',
-    'jest',
-  ],
+  plugins: ['vue', '@typescript-eslint'],
   rules: {
     'vue/html-indent': ['error', 2, {
       attribute: 2,

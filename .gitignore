@@ -130,6 +130,4 @@ dmypy.json
 
 # Frontend related
 /node_modules
-/osis_comment/static/osis_comment/osis-comment.common.*
-/osis_comment/static/osis_comment/osis-comment.umd.js*
 /coverage
