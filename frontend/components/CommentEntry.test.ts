@@ -85,7 +85,7 @@ test('entry rich text', () => {
   expect(wrapper.find('button.btn-danger').exists()).toBe(true);
 });
 
-test('entry without buttons', async () => {
+test('entry without buttons', () => {
   const wrapper = mount(CommentEntry, {
     props: {
       entry: new Entry({

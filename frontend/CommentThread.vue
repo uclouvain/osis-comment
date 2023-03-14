@@ -105,6 +105,7 @@ import CommentEntry from './components/CommentEntry.vue';
 import {Entry} from './types';
 import type {EntriesResponse} from './interfaces';
 import CommentEditor from './components/CommentEditor.vue';
+import type {PropType} from "vue";
 import {defineComponent} from "vue";
 
 export default defineComponent({
@@ -116,7 +117,7 @@ export default defineComponent({
       required: true,
     },
     tags: {
-      type: Array,
+      type: Array as PropType<string[]>,
       default: () => [],
     },
     headerTitle: {

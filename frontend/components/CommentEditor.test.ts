@@ -55,9 +55,10 @@ test('comment editor with ckeditor', async () => {
 
   const child = wrapper.findComponent({name: 'ckeditor'});
   expect(child.props('modelValue')).toBe('Lorem');
-  await child.vm.$emit('update:modelValue', 'Foobar');
+  await child.setValue("Foobar");
 
-  expect(child.props('modelValue')).toBe('Foobar');
+  await wrapper.get('button.btn-success').trigger('click');
+  expect(wrapper.emitted()).toHaveProperty('submit', [['Foobar']]);
 });
 
 test('comment editor submit', async () => {
@@ -67,7 +68,7 @@ test('comment editor submit', async () => {
     },
   });
 
-  wrapper.get('button.btn-success').trigger('click');
+  await wrapper.get('button.btn-success').trigger('click');
   expect(wrapper.emitted()).toHaveProperty('submit', [['Lorem']]);
 });
 
@@ -75,13 +76,13 @@ test('comment editor value change', async () => {
   const wrapper = mount(CommentEditor);
 
   await wrapper.get('textarea').setValue('Foobar');
-  wrapper.get('button.btn-success').trigger('click');
+  await wrapper.get('button.btn-success').trigger('click');
   expect(wrapper.emitted()).toHaveProperty('submit', [['Foobar']]);
 });
 
-test('comment editor cancel', () => {
+test('comment editor cancel', async () => {
   const wrapper = mount(CommentEditor);
 
-  wrapper.get('button.btn-default').trigger('click');
+  await wrapper.get('button.btn-default').trigger('click');
   expect(wrapper.emitted()).toHaveProperty('cancel');
 });

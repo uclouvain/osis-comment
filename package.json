@@ -6,7 +6,7 @@
     "build": "vite build --outDir osis_comment/static/osis_comment --mode production --sourcemap true",
     "watch": "vite build --outDir osis_comment/static/osis_comment --mode production --sourcemap true --watch",
     "test": "vitest",
-    "lint": "eslint frontend --ext .vue,.ts,.js",
+    "lint": "eslint frontend --ext .vue,.ts,.js ; vue-tsc",
     "coverage": "vitest run --coverage",
     "storybook": "start-storybook -p 6006 -c frontend/.storybook"
   },

@@ -55,12 +55,13 @@
 
 <script lang="ts">
 import {component} from '@mayasabha/ckeditor4-vue3';
-import { defineComponent} from 'vue';
+import {defineComponent} from 'vue';
+import type {Component} from 'vue';
 
 export default defineComponent({
   name: 'CommentEditor',
   components: {
-    ckeditor: component,
+    ckeditor: (component as Component),
   },
   props: {
     richTextConfig: {
