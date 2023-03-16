@@ -37,12 +37,17 @@ export default defineConfig({
       },
     },
   },
+  mode: 'production',
+  define: {
+    'process.env.NODE_ENV': '"production"',
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['frontend/test.setup.ts'],
     coverage: {
       provider: 'istanbul',
       all: true,
+      enabled: true,
       perFile: true,
       branches: 100,
       statements: 100,
