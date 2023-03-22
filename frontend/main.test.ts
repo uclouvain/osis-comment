@@ -41,7 +41,7 @@ beforeEach(() => {
 });
 
 test('mount app', async () => {
-  document.body.innerHTML = `<div id="app" class="comment-viewer" data-url="/api"></div>
+  document.body.innerHTML = `<div class="comment-viewer" data-url="/api"></div>
     <input name="csrfmiddlewaretoken"/>`;
 
   const spy = vi.spyOn(exports, 'createApp').mockImplementation(createApp);
@@ -60,7 +60,7 @@ test('mount app', async () => {
 
 
 test('mount app on invalid element', async () => {
-  document.body.innerHTML = `<div id="app" class="comment-viewer" data-url="/api"></div>
+  document.body.innerHTML = `<div class="comment-viewer" data-url="/api"></div>
     <input name="csrfmiddlewaretoken"/>`;
 
   const spy = vi.spyOn(exports, 'createApp').mockImplementation(createApp);
@@ -79,7 +79,7 @@ test('mount app on invalid element', async () => {
 
 
 test('correct conversions', async () => {
-  document.body.innerHTML = `<div id="app" class="comment-viewer" data-url="/api" data-page-size="2" data-tags="foo,bar"></div>
+  document.body.innerHTML = `<div class="comment-viewer" data-url="/api" data-page-size="2" data-tags="foo,bar"></div>
     <input name="csrfmiddlewaretoken"/>`;
 
   const spy = vi.spyOn(exports, 'createApp').mockImplementation(createApp);

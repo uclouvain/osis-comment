@@ -33,7 +33,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:vue/vue3-recommended',
-    'plugin:@typescript-eslint/recommended',
+    '@vue/eslint-config-typescript/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     '@vue/typescript/recommended',
     'plugin:storybook/recommended',
@@ -54,7 +54,7 @@ module.exports = {
       node: true,
     },
   }],
-  ignorePatterns: ['osis_comment/static/**/*.js'],
+  ignorePatterns: ['osis_comment/static/**/*.js', 'frontend/components/ckeditor.js'],
   globals: {
     jQuery: 'readonly',
   },

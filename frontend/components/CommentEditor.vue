@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import {component} from '@mayasabha/ckeditor4-vue3';
+import component from './ckeditor.js';
 import {defineComponent} from 'vue';
 import type {Component} from 'vue';
 
