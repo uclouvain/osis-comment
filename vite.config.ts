@@ -28,6 +28,7 @@ export default defineConfig({
           'vue-i18n': 'VueI18n',
           '@vue/runtime-dom': 'Vue',
         },
+        entryFileNames: "osis-comment.umd.min.js",
         assetFileNames: "osis-comment.[ext]",
       },
     },
