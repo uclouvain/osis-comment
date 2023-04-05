@@ -45,6 +45,7 @@ export default defineConfig({
       statements: 100,
       include: ['frontend'],
       exclude: [
+        "frontend/locales/",
         "frontend/components/ckeditor.js",
         "frontend/node_modules/",
         "frontend/.storybook",
