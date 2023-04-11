@@ -29,6 +29,10 @@ import CommentThread from './CommentThread.vue';
 
 interface Props extends Record<string, unknown> {
   url: string,
+  headerTitle?: string,
+  defaultSort?: string,
+  panelClass?: string,
+  richTextConfig?: object,
   pageSize?: number,
   tags?: string[],
 }
