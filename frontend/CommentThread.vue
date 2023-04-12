@@ -57,6 +57,7 @@
         v-else
         :key="entry.uuid"
         :entry="entry"
+        :rich-text-config="richTextConfig"
         @edit="editEntry"
         @delete="deleteEntry"
     />
