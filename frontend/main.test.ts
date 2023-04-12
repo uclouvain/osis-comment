@@ -79,7 +79,12 @@ test('mount app on invalid element', async () => {
 
 
 test('correct conversions', async () => {
-  document.body.innerHTML = `<div class="comment-viewer" data-url="/api" data-page-size="2" data-tags="foo,bar"></div>
+  document.body.innerHTML = `
+    <div class="comment-viewer"
+      data-url="/api"
+      data-page-size="2"
+      data-tags="foo,bar"
+      data-rich-text-config="{&quot;toolbar&quot;: &quot;Custom&quot;, &quot;toolbar_Custom&quot;: [[&quot;Bold&quot;, &quot;Italic&quot;, &quot;Underline&quot;]], &quot;autoParagraph&quot;: false}"></div>
     <input name="csrfmiddlewaretoken"/>`;
 
   const spy = vi.spyOn(exports, 'createApp').mockImplementation(createApp);
@@ -93,5 +98,8 @@ test('correct conversions', async () => {
       "foo",
       "bar",
     ],
+    richTextConfig: {
+      "toolbar": "Custom", "toolbar_Custom": [["Bold", "Italic", "Underline"]], "autoParagraph": false,
+    },
   });
 });

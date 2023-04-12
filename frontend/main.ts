@@ -46,6 +46,9 @@ function initCommentComponents() {
     if (typeof elem.dataset.tags !== 'undefined') {
       props.tags = elem.dataset.tags.split(',');
     }
+    if (typeof elem.dataset.richTextConfig !== 'undefined') {
+      props.richTextConfig = JSON.parse(elem.dataset.richTextConfig) as object;
+    }
     createApp(CommentThread, props).use(i18n).mount(elem);
   });
 }
