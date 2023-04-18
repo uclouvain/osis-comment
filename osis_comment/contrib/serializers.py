@@ -25,6 +25,7 @@
 # ##############################################################################
 from django.urls import reverse
 from rest_framework import serializers
+from django.utils.translation import gettext_lazy as _
 
 from osis_comment.models import CommentEntry
 
@@ -67,4 +68,8 @@ class CommentEntrySerializer(serializers.ModelSerializer):
         kwargs = {**view.kwargs, view.lookup_url_kwarg: comment.uuid}
         path_name = f"{request.namespace}:{request.url_name}" if request.namespace else request.url_name
         detail_url = reverse(path_name, kwargs=kwargs)
-        return {'edit': detail_url, 'delete': detail_url}
+        access_error = {'error': _("Permission error")}
+        return {
+            'edit': detail_url if view.has_change_permission(comment) else access_error,
+            'delete': detail_url if view.has_delete_permission(comment) else access_error,
+        }
