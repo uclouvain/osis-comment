@@ -27,7 +27,7 @@
 export default {
   thread: {
     title: "Comments",
-    add_comment: "Add comment",
+    add_comment: "Add",
     previous: "Previous page",
     next: "Next page",
     sort: "sort",
@@ -36,7 +36,7 @@ export default {
     anonymous: 'Anonymous',
     authored_date: 'on {date} at {time}',
     edit_comment: 'Edit',
-    submit_comment: "Submit",
+    save_comment: "Save",
     delete_comment: 'Delete',
     cancel_edit: 'Annuler',
     placeholder: "Your comment",
