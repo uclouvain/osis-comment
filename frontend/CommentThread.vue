@@ -131,7 +131,7 @@ export default defineComponent({
     },
     defaultSort: {
       type: String,
-      default: '-created',
+      default: '-modified_at',
     },
     panelClass: {
       type: String,
@@ -145,7 +145,7 @@ export default defineComponent({
   data() {
     const params = new URLSearchParams({
       limit: String(this.pageSize),
-      sort: '-created',
+      sort: '-modified_at',
     });
     if (this.tags.length) {
       params.append('tags', this.tags.join(','));
@@ -159,7 +159,7 @@ export default defineComponent({
       error: '',
       createUrl: null as string | null,
       currentUrl: `${this.url}?${params.toString()}`,
-      currentSort: '-created',
+      currentSort: '-modified_at',
       previousPage: null as string | null,
       nextPage: null as string | null,
       loading: true,
@@ -169,7 +169,7 @@ export default defineComponent({
   },
   computed: {
     isAscendedSort: function (): boolean {
-      return this.currentSort === 'created';
+      return this.currentSort === 'modified_at';
     },
   },
   mounted() {
@@ -179,7 +179,7 @@ export default defineComponent({
     async changeSort() {
       const url = new URL(window.location.origin + this.currentUrl);
       const params = new URLSearchParams(url.search);
-      this.currentSort = this.isAscendedSort ? '-created' : 'created';
+      this.currentSort = this.isAscendedSort ? '-modified_at' : 'modified_at';
       params.set('sort', this.currentSort);
       this.currentUrl = `${url.pathname}?${params.toString()}`;
       await this.loadEntries();

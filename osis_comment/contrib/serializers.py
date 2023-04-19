@@ -37,6 +37,7 @@ __all__ = [
 class CommentEntrySerializer(serializers.ModelSerializer):
     comment = serializers.CharField(source='content')
     created_at = serializers.DateTimeField(read_only=True)
+    modified_at = serializers.DateTimeField(read_only=True)
     links = serializers.SerializerMethodField()
     author = serializers.StringRelatedField()
 
@@ -49,6 +50,7 @@ class CommentEntrySerializer(serializers.ModelSerializer):
             "uuid",
             "comment",
             "created_at",
+            "modified_at",
             "author",
             "tags",
             "extra_data",
@@ -60,6 +62,10 @@ class CommentEntrySerializer(serializers.ModelSerializer):
         validated_data['object_uuid'] = self.context['view'].kwargs['uuid']
         validated_data['author'] = getattr(self.context['request'].user, 'person', None)
         return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        validated_data['author'] = getattr(self.context['request'].user, 'person', None)
+        return super().update(instance, validated_data)
 
     def get_links(self, comment):
         view = self.context['view']

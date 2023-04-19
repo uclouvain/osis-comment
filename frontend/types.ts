@@ -9,6 +9,7 @@ export class Entry {
   links: CommentLinks;
 
   created_at: Date;
+  modified_at: Date;
 
   constructor(
       {
@@ -19,6 +20,7 @@ export class Entry {
         extra_data,
         links,
         created_at,
+        modified_at,
       }: EntryRecord,
   ) {
     this.uuid = uuid;
@@ -28,5 +30,6 @@ export class Entry {
     this.extra_data = extra_data;
     this.links = links;
     this.created_at = new Date(created_at);
+    this.modified_at = new Date(modified_at);
   }
 }

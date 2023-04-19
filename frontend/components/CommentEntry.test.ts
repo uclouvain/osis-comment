@@ -34,6 +34,7 @@ const comment = "Lorem ipsum dolor amet\nNope";
 const entryData = {
   uuid: "8784bf99-d4f6-4971-99cf-5227afbeca0f",
   created_at: "2023-03-02T11:37:05.493008",
+  modified_at: "2023-03-02T11:37:05.493008",
   comment: comment,
   author: "John Doe",
   tags: [],
