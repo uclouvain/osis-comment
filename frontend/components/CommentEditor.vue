@@ -36,12 +36,12 @@
         v-model="value"
         :config="richTextConfig"
     />
-    <div class="text-right">
+    <div class="text-right btn-actions">
       <button
-          class="btn btn-sm btn-success"
+          class="btn btn-sm btn-primary"
           @click="$emit('submit', value)"
       >
-        {{ $t('entry.submit_comment') }}
+        {{ $t('entry.save_comment') }}
       </button>
       <button
           class="btn btn-sm btn-default"
@@ -81,3 +81,13 @@ export default defineComponent({
   },
 });
 </script>
+
+
+<style>
+  .btn-actions {
+    margin-top: .5em;
+  }
+  .btn-actions > button {
+    margin-left: .3em;
+  }
+</style>

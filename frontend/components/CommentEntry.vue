@@ -39,7 +39,7 @@
       <div class="pull-right comment-actions">
         <button
             v-if="typeof entry.links.edit === 'string'"
-            class="btn btn-sm btn-default"
+            class="btn btn-sm btn-primary"
             :title="$t('entry.edit_comment')"
             @click="isEditing = true"
         >
@@ -51,7 +51,7 @@
             :title="$t('entry.delete_comment')"
             @click="$emit('delete', entry.links.delete)"
         >
-          <i class="fas fa-trash-alt" />
+          <i class="fas fa-times"></i>
         </button>
       </div>
       <div
@@ -117,5 +117,11 @@ export default defineComponent({
 
 .comment-actions {
   padding: 4px 0;
+}
+
+.comment-actions > button {
+  margin-left: .3em;
+  min-width: 34px;
+  min-height: 34px;
 }
 </style>
