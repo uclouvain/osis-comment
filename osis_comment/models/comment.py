@@ -45,6 +45,10 @@ class CommentEntry(models.Model):
         verbose_name=_("Created"),
         auto_now_add=True,
     )
+    modified_at = models.DateTimeField(
+        verbose_name=_("Modified"),
+        auto_now=True,
+    )
     author = models.ForeignKey(
         'base.Person',
         on_delete=models.SET_NULL,
@@ -65,4 +69,4 @@ class CommentEntry(models.Model):
     class Meta:
         verbose_name = _("Comment entry")
         verbose_name_plural = _("Comment entries")
-        ordering = ("-created_at",)
+        ordering = ("-modified_at",)

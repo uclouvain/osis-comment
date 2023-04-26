@@ -107,13 +107,13 @@ class CommentEntryAPIMixin(ModelViewSet):
 
         # Single comment
         if 'last' in self.request.GET:
-            return qs.order_by('-created_at')[:1]
+            return qs.order_by('-modified_at')[:1]
 
         # Sorting
-        current_sort = self.request.GET.get('sort', '-created')
-        valid_sort = current_sort.lstrip('-') == 'created'
+        current_sort = self.request.GET.get('sort', '-modified_at')
+        valid_sort = current_sort.lstrip('-') == 'modified_at'
         if valid_sort:
-            return qs.order_by('-created_at' if current_sort[0] == '-' else 'created_at')
+            return qs.order_by('-modified_at' if current_sort[0] == '-' else 'modified_at')
 
         return qs
 

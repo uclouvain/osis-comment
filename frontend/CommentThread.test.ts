@@ -39,6 +39,7 @@ const mockEntries: EntriesResponse = {
       uuid: "8784bf99-d4f6-4971-99cf-5227afbeca0f",
       comment: "Lorem ipsum dolor amet",
       created_at: "2023-03-03T11:37:05.493008",
+      modified_at: "2023-03-03T11:37:05.493008",
       author: "John Doe",
       tags: [],
       extra_data: {},
@@ -51,6 +52,7 @@ const mockEntries: EntriesResponse = {
       uuid: "8784bf99-d4f6-4971-99cf-5227afbeca0f",
       comment: "Consetetur sadipscing elitr, sed diam nonumy eirmod",
       created_at: "2023-03-02T11:37:05.493008",
+      modified_at: "2023-03-02T11:37:05.493008",
       author: "John Doe",
       tags: [],
       extra_data: {},
@@ -63,6 +65,7 @@ const mockEntries: EntriesResponse = {
       uuid: "8784bf99-d4f6-4971-99cf-5227afbeca0f",
       comment: "Et dolore magna aliquyam erat, sed diam voluptua.",
       created_at: "2023-03-01T11:37:05.493008",
+      modified_at: "2023-03-01T11:37:05.493008",
       author: "Bob Smith",
       tags: [],
       extra_data: {},
@@ -136,23 +139,23 @@ test('change sort', async () => {
   });
 
   await flushPromises();
-  expect(fetchMock.lastUrl()).toBe('/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-created');
+  expect(fetchMock.lastUrl()).toBe('/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at');
 
   const sortButton = wrapper.get('.panel-heading .btn');
   expect(sortButton.get('i').classes()).toContain('fa-sort-down');
 
   await sortButton.trigger('click');
-  expect(fetchMock.lastUrl()).toBe('/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=created');
+  expect(fetchMock.lastUrl()).toBe('/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=modified_at');
   expect(sortButton.get('i').classes()).toContain('fa-sort-up');
 
   await sortButton.trigger('click');
-  expect(fetchMock.lastUrl()).toBe('/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-created');
+  expect(fetchMock.lastUrl()).toBe('/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at');
   expect(sortButton.get('i').classes()).toContain('fa-sort-down');
 });
 
 test('handle pagination', async () => {
-  const previousUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-created&page=1';
-  const nextUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-created&page=3';
+  const previousUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at&page=1';
+  const nextUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at&page=3';
   fetchMock.reset().mock('path:' + apiUrl, {
     ...mockEntries,
     previous: previousUrl,

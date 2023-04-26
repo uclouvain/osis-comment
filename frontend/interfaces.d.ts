@@ -50,4 +50,5 @@ interface EntryRecord {
   extra_data: object;
   links: CommentLinks;
   created_at: string;
+  modified_at: string;
 }

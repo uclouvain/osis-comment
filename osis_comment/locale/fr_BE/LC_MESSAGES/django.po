@@ -2,8 +2,6 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
@@ -17,23 +15,29 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Author"
-msgstr "Auteur"
+msgid "Comment entries"
+msgstr "Entrées de commentaire"
+
+msgid "Comment entry"
+msgstr "Entrée de commentaire"
 
 msgid "Created"
 msgstr "Créé"
 
-msgid "History entries"
-msgstr "Entrées d'historique"
+msgid "Extra data"
+msgstr "Extra data"
 
-msgid "History entry"
-msgstr "Entrée d'historique"
+msgid "Modified"
+msgstr "Modifié"
 
-msgid "Message in english"
-msgstr "Message en anglais"
-
-msgid "Message in french"
-msgstr "Message en français"
+msgid "Permission error"
+msgstr "Erreur permission"
 
 msgid "Registered object's UUID"
 msgstr "UUID de l'objet enregistré"
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "UUID"
+msgstr "UUID"

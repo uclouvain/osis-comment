@@ -18,23 +18,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Author"
+msgid "Comment entries"
+msgstr ""
+
+msgid "Comment entry"
 msgstr ""
 
 msgid "Created"
 msgstr ""
 
-msgid "History entries"
+msgid "Extra data"
 msgstr ""
 
-msgid "History entry"
+msgid "Modified"
 msgstr ""
 
-msgid "Message in english"
-msgstr ""
-
-msgid "Message in french"
+msgid "Permission error"
 msgstr ""
 
 msgid "Registered object's UUID"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "UUID"
 msgstr ""
