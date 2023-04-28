@@ -31,6 +31,9 @@
   >
     <div class="panel-heading clearfix">
       {{ headerTitle || $t('thread.title') }}
+      <template v-if="total != null">
+        ({{ total }})
+      </template>
       <button
           class="btn btn-default btn-sm pull-right"
           @click="changeSort()"
@@ -157,6 +160,7 @@ export default defineComponent({
     return {
       entries: [] as Entry[],
       error: '',
+      total: null as number | null,
       createUrl: null as string | null,
       currentUrl: `${this.url}?${params.toString()}`,
       currentSort: '-modified_at',
@@ -190,6 +194,7 @@ export default defineComponent({
         this.createUrl = typeof data.create === 'string' ? data.create : null;
         this.previousPage = data.previous;
         this.nextPage = data.next;
+        this.total = data.count;
         this.entries = data.results.map(r => new Entry(r));
       }
     },
@@ -211,6 +216,7 @@ export default defineComponent({
     },
     async doRequest(url: string, params: object, refresh = true) {
       this.loading = true;
+      this.error = '';
       try {
         const response = await fetch(url, {
           mode: 'same-origin',

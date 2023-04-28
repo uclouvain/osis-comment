@@ -53,7 +53,7 @@ test('entry', () => {
   });
 
   expect(wrapper.html()).toMatchSnapshot();
-  expect(wrapper.find('button.btn-default').exists()).toBe(true);
+  expect(wrapper.find('button.btn-primary').exists()).toBe(true);
   expect(wrapper.find('button.btn-danger').exists()).toBe(true);
 });
 
@@ -82,7 +82,7 @@ test('entry rich text', () => {
   });
 
   expect(wrapper.html()).toMatchSnapshot();
-  expect(wrapper.find('button.btn-default').exists()).toBe(true);
+  expect(wrapper.find('button.btn-primary').exists()).toBe(true);
   expect(wrapper.find('button.btn-danger').exists()).toBe(true);
 });
 
@@ -99,7 +99,7 @@ test('entry without buttons', () => {
     },
   });
 
-  expect(wrapper.find('button.btn-default').exists()).toBe(false);
+  expect(wrapper.find('button.btn-primary').exists()).toBe(false);
   expect(wrapper.find('button.btn-danger').exists()).toBe(false);
 });
 
@@ -108,10 +108,10 @@ test('entry editing', async () => {
     props: {entry: new Entry(entryData)},
   });
 
-  await wrapper.find('button.btn-default').trigger('click');
+  await wrapper.find('button.btn-primary').trigger('click');
   expect(wrapper.findComponent({name: 'CommentEditor'}).exists()).toBe(true);
 
-  await wrapper.find('button.btn-success').trigger('click');
+  await wrapper.find('button.btn-primary').trigger('click');
   expect(wrapper.emitted('edit')).toEqual([[apiUrl, comment]]);
 });
 
@@ -120,7 +120,7 @@ test('entry editing cancel', async () => {
     props: {entry: new Entry(entryData)},
   });
 
-  await wrapper.find('button.btn-default').trigger('click');
+  await wrapper.find('button.btn-primary').trigger('click');
   expect(wrapper.findComponent({name: 'CommentEditor'}).exists()).toBe(true);
 
   await wrapper.find('button.btn-default').trigger('click');
