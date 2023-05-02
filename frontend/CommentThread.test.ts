@@ -181,7 +181,7 @@ test('add comment', async () => {
   });
 
   await flushPromises();
-  const addButton = wrapper.get('.btn-primary');
+  const addButton = wrapper.get('.btn-primary.pull-right');
   expect(addButton.text()).toContain('thread.add_comment');
   expect(addButton.get('i').classes()).toContain('fa-plus');
   await addButton.trigger('click');
@@ -190,7 +190,7 @@ test('add comment', async () => {
   expect(commentEditor.exists()).toBe(true);
   await commentEditor.get('textarea').setValue('Foobar');
 
-  await commentEditor.get('button.btn-success').trigger('click');
+  await commentEditor.get('button.btn-primary').trigger('click');
   expect(commentEditor.emitted('submit')).toStrictEqual([['Foobar']]);
   await flushPromises();
   const postCall = (fetchMock.calls(true, 'POST')[0][1] as RequestInit).body;
@@ -203,7 +203,7 @@ test('cancel adding comment', async () => {
   });
 
   await flushPromises();
-  await wrapper.get('.btn-primary').trigger('click');
+  await wrapper.get('.btn-primary.pull-right').trigger('click');
 
   const commentEditor = wrapper.findComponent(CommentEditor);
   expect(commentEditor.exists()).toBe(true);
@@ -221,7 +221,7 @@ test('edit comment', async () => {
 
   const firstComment = wrapper.findAllComponents(CommentEntry)[0];
 
-  const editButton = firstComment.get('.btn-default');
+  const editButton = firstComment.get('.btn-primary');
   expect(editButton.html()).toContain('entry.edit_comment');
   expect(editButton.get('i').classes()).toContain('fa-pencil');
   await editButton.trigger('click');
@@ -235,7 +235,7 @@ test('edit comment', async () => {
   fetchMock.reset()
       .mock('path:/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/8784bf99-d4f6-4971-99cf-5227afbeca0f', 200)
       .mock('path:/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/', 200);
-  await commentEditor.get('button.btn-success').trigger('click');
+  await commentEditor.get('button.btn-primary').trigger('click');
   await flushPromises();
   const postCall = (fetchMock.calls(true, 'PUT')[0][1] as RequestInit).body;
   expect(postCall).toEqual(JSON.stringify({comment: "Foobar"}));
@@ -254,7 +254,7 @@ test('delete comment', async () => {
 
   const editButton = firstComment.get('.btn-danger');
   expect(editButton.html()).toContain('entry.delete_comment');
-  expect(editButton.get('i').classes()).toContain('fa-trash-alt');
+  expect(editButton.get('i').classes()).toContain('fa-times');
 
   fetchMock.reset()
       .mock('path:/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/8784bf99-d4f6-4971-99cf-5227afbeca0f', 200)

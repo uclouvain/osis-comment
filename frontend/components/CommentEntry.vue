@@ -51,7 +51,7 @@
             :title="$t('entry.delete_comment')"
             @click="$emit('delete', entry.links.delete)"
         >
-          <i class="fas fa-times"></i>
+          <i class="fas fa-times" />
         </button>
       </div>
       <div
