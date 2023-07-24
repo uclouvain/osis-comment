@@ -55,12 +55,12 @@ export default defineComponent({
   },
   methods: {
     async loadCount() {
-      const data = (await this.doRequest(this.url, {}, false)) as EntriesResponse;
+      const data = (await this.doRequest(this.url, {})) as EntriesResponse;
       if (data) {
         this.value = data.count;
       }
     },
-    async doRequest(url: string, params: object, refresh = true) {
+    async doRequest(url: string, params: object) {
       this.loading = true;
       this.error = '';
       try {
@@ -72,9 +72,6 @@ export default defineComponent({
           ...params,
         });
         if (response.status >= 200 && response.status < 300) {
-          if (refresh) {
-            await this.loadCount();
-          }
           this.loading = false;
           return response.json();
         }
