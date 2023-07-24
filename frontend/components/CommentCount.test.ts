@@ -25,17 +25,20 @@
  */
 
 import {expect, test} from 'vitest';
-import {mount} from '@vue/test-utils';
+import {flushPromises, mount} from '@vue/test-utils';
 import CommentCount from "./CommentCount.vue";
 
-test('comment count', () => {
+
+const apiUrl = "/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/count";
+test('comment count', async () => {
   expect(CommentCount).toBeTruthy();
 
   const wrapper = mount(CommentCount, {
     props: {
-      url: "apiUrl",
+      url: apiUrl,
     },
   });
+  await flushPromises();
 
   expect(wrapper.html()).toMatchSnapshot();
   expect(wrapper.exists()).toBe(true);

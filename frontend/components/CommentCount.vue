@@ -77,8 +77,6 @@ export default defineComponent({
           }
           this.loading = false;
           return response.json();
-        } else {
-          this.error = response.statusText;
         }
       } catch (e) {
         this.error = (e as Error).message;
