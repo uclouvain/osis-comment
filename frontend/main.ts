@@ -26,6 +26,7 @@
 import {createApp} from '@vue/runtime-dom'; // not importing from 'vue' so it can be spied on
 import {i18n} from './i18n';
 import CommentThread from './CommentThread.vue';
+import CommentCount from "./components/CommentCount.vue";
 
 interface Props extends Record<string, unknown> {
   url: string,
@@ -38,6 +39,7 @@ interface Props extends Record<string, unknown> {
 }
 
 function initCommentComponents() {
+
   document.querySelectorAll<HTMLElement>('.comment-viewer:not([data-v-app])').forEach((elem) => {
     const props: Props = {url: "", ...elem.dataset};
     if (typeof elem.dataset.pageSize !== 'undefined') {
@@ -50,6 +52,11 @@ function initCommentComponents() {
       props.richTextConfig = JSON.parse(elem.dataset.richTextConfig) as object;
     }
     createApp(CommentThread, props).use(i18n).mount(elem);
+  });
+
+  document.querySelectorAll<HTMLElement>('.comment-count:not([data-v-app])').forEach((elem) => {
+      const props: Props = {url: "", ...elem.dataset};
+      createApp(CommentCount, props).mount(elem);
   });
 }
 
