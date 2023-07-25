@@ -44,6 +44,7 @@
     "vue-tsc": "^1.0.24"
   },
   "dependencies": {
-    "ckeditor4-integrations-common": "^1.0.0"
+    "ckeditor4-integrations-common": "^1.0.0",
+    "mitt": "^3.0.1"
   }
 }

@@ -27,7 +27,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='OSIS Comment',
-    version='0.13',
+    version='0.14',
     description='Comment API and widget',
     url='http://github.com/uclouvain/osis-comment',
     author='Université catholique de Louvain',

@@ -24,35 +24,23 @@
  *
  */
 
-interface LinkError {
-  error: string
-}
+import type {Meta, StoryFn} from "@storybook/vue3";
+import CommentCount from "./CommentCount.vue";
 
-interface CommentLinks {
-  edit: string | LinkError;
-  delete: string | LinkError;
-}
+export default {
+  title: 'CommentCount',
+  component: CommentCount,
+} as Meta;
 
+const Template: StoryFn<typeof CommentCount> = (args) => ({
+  components: {CommentCount},
+  setup() {
+    return {args};
+  },
+  template: '<CommentCount v-bind="args" />',
+});
 
-export interface EntriesResponse {
-  results: EntryRecord[];
-  next: string | null;
-  previous: string | null;
-  create: string | LinkError;
-  count: number;
-}
-
-export interface CountResponse {
-  count: number
-}
-
-interface EntryRecord {
-  uuid: string;
-  comment: string;
-  author: string | null;
-  tags: string[];
-  extra_data: object;
-  links: CommentLinks;
-  created_at: string;
-  modified_at: string;
-}
+export const Default = Template.bind({});
+Default.args = {
+  count: 0,
+};

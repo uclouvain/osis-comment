@@ -33,13 +33,14 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from .serializers import CommentEntrySerializer
 from ..models import CommentEntry
 
 __all__ = [
     "CommentEntryAPIMixin",
+    "CommentCountAPIMixin",
 ]
 
 
@@ -65,6 +66,27 @@ class LimitOffsetWithCreateLinkPagination(LimitOffsetPagination):
                 ]
             )
         )
+
+
+class CommentCountAPIMixin(ViewSet):
+    authentication_classes = [SessionAuthentication]
+    lookup_url_kwarg = 'comment_uuid'
+
+    @classonlymethod
+    def as_view(cls, actions=None, **initkwargs):
+        # Set default action to be retrieve for GET
+        return super().as_view(
+            actions={'get': 'retrieve'},
+            **initkwargs,
+        )
+
+    def retrieve(self):
+        return self.get_count(object_uuid=self.kwargs.get('uuid'))
+
+    @staticmethod
+    def get_count(object_uuid):
+        """Utility function to get comments count for a given uuid"""
+        return CommentEntry.objects.filter(object_uuid=object_uuid).count()
 
 
 class CommentEntryAPIMixin(ModelViewSet):

@@ -110,6 +110,7 @@ import {Entry} from './types';
 import type {EntriesResponse} from './interfaces';
 import CommentEditor from './components/CommentEditor.vue';
 import type {PropType} from "vue";
+import EventBus from './event-bus';
 import {defineComponent} from "vue";
 
 export default defineComponent({
@@ -229,6 +230,7 @@ export default defineComponent({
         if (response.status >= 200 && response.status < 300) {
           if (refresh) {
             await this.loadEntries();
+            EventBus.emit("REFRESH_COMMENTS_EVENT");
           }
           this.loading = false;
           return response.json();

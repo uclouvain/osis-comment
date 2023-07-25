@@ -42,6 +42,7 @@ beforeEach(() => {
 
 test('mount app', async () => {
   document.body.innerHTML = `<div class="comment-viewer" data-url="/api"></div>
+    <div class="comment-count" data-url="/api"></div>
     <input name="csrfmiddlewaretoken"/>`;
 
   const spy = vi.spyOn(exports, 'createApp').mockImplementation(createApp);
