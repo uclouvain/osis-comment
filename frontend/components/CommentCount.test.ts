@@ -27,9 +27,14 @@
 import {expect, test} from 'vitest';
 import {flushPromises, mount} from '@vue/test-utils';
 import CommentCount from "./CommentCount.vue";
+import fetchMock, {type MockResponse} from "fetch-mock";
+import EventBus from "../event-bus";
 
 const apiUrl = "/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/count";
 test('comment count', async () => {
+
+  fetchMock.mock('path:'+apiUrl, JSON.parse('{"count": 2}') as MockResponse);
+
   expect(CommentCount).toBeTruthy();
 
   const wrapper = mount(CommentCount, {
@@ -41,4 +46,25 @@ test('comment count', async () => {
 
   expect(wrapper.html()).toMatchSnapshot();
   expect(wrapper.exists()).toBe(true);
+});
+
+test('refresh count on update event', async () => {
+
+  fetchMock.mock('path:'+apiUrl, JSON.parse('{"count": 2}') as MockResponse, {overwriteRoutes: false});
+
+  expect(CommentCount).toBeTruthy();
+  const wrapper = mount(CommentCount, {
+    props: {
+      url: 'path:'+apiUrl,
+    },
+  });
+
+  await flushPromises();
+  expect(wrapper.text()).toBe('2');
+
+  fetchMock.mock('path:'+apiUrl, JSON.parse('{"count": 3}') as MockResponse, {overwriteRoutes: true});
+  EventBus.emit("REFRESH_COMMENTS_EVENT");
+
+  await flushPromises();
+  expect(wrapper.text()).toBe('3');
 });

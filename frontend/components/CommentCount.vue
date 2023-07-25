@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import {defineComponent} from 'vue';
-import {type EntriesResponse} from "../interfaces";
+import {type CountResponse} from "../interfaces";
 import EventBus from "../event-bus";
 
 export default defineComponent({
@@ -55,30 +55,14 @@ export default defineComponent({
   },
   methods: {
     async loadCount() {
-      const data = (await this.doRequest(this.url, {})) as EntriesResponse;
-      if (data) {
-        this.value = data.count;
-      }
-    },
-    async doRequest(url: string, params: object) {
-      this.loading = true;
-      this.error = '';
-      try {
-        const response = await fetch(url, {
-          mode: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json;charset=utf-8',
-          },
-          ...params,
-        });
-        if (response.status >= 200 && response.status < 300) {
-          this.loading = false;
-          return response.json();
-        }
-      } catch (e) {
-        this.error = (e as Error).message;
-      }
-      this.loading = false;
+      const response = await fetch(this.url, {
+        mode: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+      });
+      const res = await response.json() as CountResponse;
+      this.value = res.count;
     },
   },
 });

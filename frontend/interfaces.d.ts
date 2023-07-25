@@ -42,6 +42,10 @@ export interface EntriesResponse {
   count: number;
 }
 
+export interface CountResponse {
+  count: number
+}
+
 interface EntryRecord {
   uuid: string;
   comment: string;
