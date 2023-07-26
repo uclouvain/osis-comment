@@ -24,7 +24,10 @@
   -
   -->
 <template>
-  <div class="badge badge-compteur">
+  <div
+      v-if="value != 0"
+      class="badge badge-compteur"
+  >
     {{ value }}
   </div>
 </template>
