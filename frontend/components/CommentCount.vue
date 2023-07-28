@@ -73,22 +73,17 @@ export default defineComponent({
 
 
 <style>
-  .badge {
+  .badge-compteur{
     display: inline-block;
     min-width: 10px;
     padding: 3px 7px;
-    font-size: 12px;
     font-weight: 700;
     line-height: 1;
     color: #fff;
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
-    background-color: #777;
     border-radius: 10px;
-  }
-
-  .badge-compteur{
     margin-left: 5px;
     font-size: 9px;
     background-color: #337ab7;
