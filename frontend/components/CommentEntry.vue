@@ -30,7 +30,7 @@
       <strong>{{ entry.author || $t('entry.anonymous') }}</strong>
       {{
         $t('entry.authored_date', {
-          date: entry.modified_at.toLocaleDateString(),
+          date: entry.modified_at.toLocaleDateString(this.$i18n.locale),
           time: entry.modified_at.toLocaleTimeString(),
         })
       }}
