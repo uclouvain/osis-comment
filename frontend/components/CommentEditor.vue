@@ -36,15 +36,15 @@
         v-model="value"
         :config="richTextConfig"
     />
-    <div class="text-right btn-actions">
+    <div class="text-right text-end btn-actions">
       <button
-          class="btn btn-sm btn-primary"
+          class="btn btn-sm p-2 btn-primary fs-7"
           @click="$emit('submit', value)"
       >
         {{ $t('entry.save_comment') }}
       </button>
       <button
-          class="btn btn-sm btn-default"
+          class="btn btn-sm p-2 btn-default fs-7"
           @click="$emit('cancel')"
       >
         {{ $t('entry.cancel_edit') }}

@@ -26,16 +26,16 @@
 
 <template>
   <div
-      class="comment-thread panel"
-      :class="`panel-${panelClass}`"
+      class="comment-thread panel border border-primary mb-4 rounded-top d-flex flex-column"
+      :class="`panel-${panelClass} card-${panelClass}`"
   >
-    <div class="panel-heading clearfix">
+    <div class="panel-heading clearfix bg-primary text-white">
       {{ headerTitle || $t('thread.title') }}
       <template v-if="total != null">
         ({{ total }})
       </template>
       <button
-          class="btn btn-default btn-sm pull-right"
+          class="btn btn-default p-2 px-3 btn-sm pull-right float-end"
           @click="changeSort()"
       >
         {{ $t('thread.sort') }}
@@ -51,7 +51,7 @@
     />
     <div
         v-else-if="error"
-        class="panel-body text-danger"
+        class="panel-body card-body pb-0 text-danger"
     >
       {{ error }}
     </div>
@@ -66,7 +66,7 @@
     />
     <div
         v-if="nextPage || previousPage || createUrl"
-        class="panel-body"
+        class="panel-body card-body pb-3"
     >
       <button
           v-if="previousPage"
@@ -87,7 +87,7 @@
       <template v-if="createUrl">
         <button
             v-if="!isAdding"
-            class="btn btn-sm btn-primary pull-right"
+            class="btn btn-sm p-2 btn-primary pull-right float-end fs-7"
             @click="isAdding = !isAdding"
         >
           <i class="fas fa-plus" />

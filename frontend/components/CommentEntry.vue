@@ -25,7 +25,7 @@
   -->
 
 <template>
-  <div class="panel-body clearfix">
+  <div class="panel-body card-body pb-0 clearfix">
     <div class="comment-authoring">
       <strong>{{ entry.author || $t('entry.anonymous') }}</strong>
       {{
@@ -36,14 +36,14 @@
       }}
     </div>
     <template v-if="!isEditing">
-      <div class="pull-right comment-actions">
+      <div class="pull-right float-end comment-actions">
         <button
             v-if="typeof entry.links.edit === 'string'"
             class="btn btn-sm btn-primary"
             :title="$t('entry.edit_comment')"
             @click="isEditing = true"
         >
-          <i class="fas fa-pencil" />
+          <i class="fas fa-pencil fs-6" />
         </button>
         <button
             v-if="typeof entry.links.delete === 'string'"
@@ -51,12 +51,12 @@
             :title="$t('entry.delete_comment')"
             @click="$emit('delete', entry.links.delete)"
         >
-          <i class="fas fa-times" />
+          <i class="fas fa-times fs-6" />
         </button>
       </div>
       <div
           v-if="!richTextConfig"
-          class="comment-content"
+          class="comment-content pb-0"
       >
         <!-- eslint-disable vue/no-v-html -->
         <p v-html="entry.comment.replace(/\n/g, '<br/>')" />
