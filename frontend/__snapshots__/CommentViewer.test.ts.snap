@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`thread 1`] = `
+"<div class=\\"comment-panel panel border border-primary mb-4 rounded-top d-flex flex-column panel-default card-default\\">
+  <div class=\\"panel-heading clearfix bg-primary text-white\\">thread.title (3) <button class=\\"btn btn-default p-2 px-3 btn-sm pull-right float-end\\">thread.sort <i class=\\"fas fa-sort-down\\"></i></button></div>
+  <!--v-if-->
+  <div class=\\"panel-body card-body pb-0 clearfix\\">
+    <div class=\\"comment-authoring\\">
+      <!--v-if--><strong>John Doe</strong> entry.authored_date
+    </div>
+    <div class=\\"pull-right float-end comment-actions\\"><button class=\\"btn btn-sm btn-primary\\" title=\\"entry.edit_comment\\"><i class=\\"fas fa-pencil fs-6\\"></i></button><button class=\\"btn btn-sm btn-danger\\" title=\\"entry.delete_comment\\"><i class=\\"fas fa-times fs-6\\"></i></button></div>
+    <div class=\\"comment-content pb-0\\">
+      <!-- eslint-disable vue/no-v-html -->
+      <p>Lorem ipsum dolor amet</p>
+    </div>
+  </div>
+  <div class=\\"panel-body card-body pb-0 clearfix\\">
+    <div class=\\"comment-authoring\\">
+      <!--v-if--><strong>John Doe</strong> entry.authored_date
+    </div>
+    <div class=\\"pull-right float-end comment-actions\\">
+      <!--v-if-->
+      <!--v-if-->
+    </div>
+    <div class=\\"comment-content pb-0\\">
+      <!-- eslint-disable vue/no-v-html -->
+      <p>Consetetur sadipscing elitr, sed diam nonumy eirmod</p>
+    </div>
+  </div>
+  <div class=\\"panel-body card-body pb-0 clearfix\\">
+    <div class=\\"comment-authoring\\">
+      <!--v-if--><strong>Bob Smith</strong> entry.authored_date
+    </div>
+    <div class=\\"pull-right float-end comment-actions\\"><button class=\\"btn btn-sm btn-primary\\" title=\\"entry.edit_comment\\"><i class=\\"fas fa-pencil fs-6\\"></i></button><button class=\\"btn btn-sm btn-danger\\" title=\\"entry.delete_comment\\"><i class=\\"fas fa-times fs-6\\"></i></button></div>
+    <div class=\\"comment-content pb-0\\">
+      <!-- eslint-disable vue/no-v-html -->
+      <p>Et dolore magna aliquyam erat, sed diam voluptua.</p>
+    </div>
+  </div>
+  <div class=\\"panel-body card-body pb-3\\">
+    <!--v-if-->
+    <!--v-if--><button class=\\"btn btn-sm p-2 btn-primary pull-right float-end fs-7\\"><i class=\\"fas fa-plus\\"></i> thread.add_comment</button>
+  </div>
+</div>"
+`;

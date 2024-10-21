@@ -24,24 +24,24 @@
  *
  */
 
-import CommentThread from './CommentThread.vue';
+import CommentViewer from './CommentViewer.vue';
 import fetchMock from 'fetch-mock';
 import type {Meta, StoryFn} from "@storybook/vue3";
 import type {EntriesResponse} from "./interfaces";
 
 export default {
-  title: 'CommentThread',
-  component: CommentThread,
+  title: 'CommentViewer',
+  component: CommentViewer,
 } as Meta;
 
-const Template: StoryFn<typeof CommentThread> = (args) => ({
-  components: {CommentThread},
+const Template: StoryFn<typeof CommentViewer> = (args) => ({
+  components: {CommentViewer},
   setup() {
     fetchMock.restore().mock('path:/api', mockEntries);
     return {args};
   },
   template: `
-    <CommentThread v-bind="args" url="/api" />
+    <CommentViewer v-bind="args" url="/api" :single-mode="false" />
   `,
 });
 
@@ -101,40 +101,40 @@ Default.args = {
 export const NoComments = () => {
   fetchMock.restore().mock('path:/api', {...mockEntries, results: []});
   return {
-    components: {CommentThread},
-    template: '<CommentThread url="/api"/>',
+    components: {CommentViewer},
+    template: '<CommentViewer url="/api" :single-mode="false" />',
   };
 };
 
 export const HttpError = () => {
   fetchMock.restore().mock('path:/api', 404);
   return {
-    components: {CommentThread},
-    template: '<CommentThread url="/api"/>',
+    components: {CommentViewer},
+    template: '<CommentViewer url="/api" :single-mode="false" />',
   };
 };
 
 export const Exception = () => {
   fetchMock.restore().mock('path:/api', {throws: new Error('Some network error')});
   return {
-    components: {CommentThread},
-    template: '<CommentThread url="/api"/>',
+    components: {CommentViewer},
+    template: '<CommentViewer url="/api" :single-mode="false" />',
   };
 };
 
 export const WithoutAdding = () => {
   fetchMock.restore().mock('path:/api', {...mockEntries, create: {error: "Nope"}});
   return {
-    components: {CommentThread},
-    template: '<CommentThread url="/api"/>',
+    components: {CommentViewer},
+    template: '<CommentViewer url="/api" :single-mode="false" />',
   };
 };
 
 export const Paginated = () => {
   fetchMock.restore().mock('path:/api', {...mockEntries, next: "/api?next", previous: "/api?previous"});
   return {
-    components: {CommentThread},
-    template: '<CommentThread url="/api" />',
+    components: {CommentViewer},
+    template: '<CommentViewer url="/api" :single-mode="false" />',
   };
 };
 
@@ -142,7 +142,16 @@ export const Paginated = () => {
 export const Ckeditor = () => {
   fetchMock.restore().mock('path:/api', {...mockEntries, results: []});
   return {
-    components: {CommentThread},
-    template: '<CommentThread url="/api" :rich-text-config="{}" />',
+    components: {CommentViewer},
+    template: '<CommentViewer url="/api" :single-mode="false" :rich-text-config="{}" />',
+  };
+};
+
+
+export const SingleView = () => {
+  fetchMock.restore().mock('path:/api', {...mockEntries, results: [mockEntries.results[0]]});
+  return {
+    components: {CommentViewer},
+    template: '<CommentViewer url="/api" :single-mode="true" />',
   };
 };

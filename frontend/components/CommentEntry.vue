@@ -27,10 +27,11 @@
 <template>
   <div class="panel-body card-body pb-0 clearfix">
     <div class="comment-authoring">
+      <span v-if="withLastUpdateByPrefix">{{ $t('entry.last_update_by') + ' ' }}</span>
       <strong>{{ entry.author || $t('entry.anonymous') }}</strong>
       {{
         $t('entry.authored_date', {
-          date: entry.modified_at.toLocaleDateString(this.$i18n.locale),
+          date: entry.modified_at.toLocaleDateString($i18n.locale),
           time: entry.modified_at.toLocaleTimeString(),
         })
       }}
@@ -72,7 +73,7 @@
         v-else
         :default-value="entry.comment"
         :rich-text-config="richTextConfig"
-        @submit="(value) => $emit('edit', entry.links.edit, value)"
+        @submit="(value) => $emit('edit', entry.links.edit, value, () => (isEditing = false))"
         @cancel="isEditing = false"
     />
   </div>
@@ -94,6 +95,10 @@ export default defineComponent({
     entry: {
       type: Entry,
       required: true,
+    },
+    withLastUpdateByPrefix: {
+      type: Boolean,
+      default: () => false,
     },
   },
   emits: ['edit', 'delete'],
