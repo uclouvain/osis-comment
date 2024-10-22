@@ -1,12 +1,18 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`mount app 1`] = `
-"<div class=\\"comment-viewer\\" data-url=\\"/api\\" data-v-app=\\"\\"><div class=\\"comment-thread panel panel-default\\"><div class=\\"panel-heading clearfix\\">Comments  (0) <button class=\\"btn btn-default btn-sm pull-right\\">sort <i class=\\"fas fa-sort-down\\"></i></button></div><!--v-if--></div></div>
+"<div class=\\"comment-thread-viewer\\" data-url=\\"/api\\" data-v-app=\\"\\"><div class=\\"comment-panel panel border border-primary mb-4 rounded-top d-flex flex-column panel-default card-default\\"><div class=\\"panel-heading clearfix bg-primary text-white\\">Comments  (0) <button class=\\"btn btn-default p-2 px-3 btn-sm pull-right float-end\\">sort <i class=\\"fas fa-sort-down\\"></i></button></div><!--v-if--><!--v-if--></div></div>
+    <div class=\\"comment-count\\" data-url=\\"/api\\" data-v-app=\\"\\"><!--v-if--></div>
+    <input name=\\"csrfmiddlewaretoken\\">"
+`;
+
+exports[`mount app in single mode 1`] = `
+"<div class=\\"comment-viewer\\" data-url=\\"/api\\" data-v-app=\\"\\"><div class=\\"comment-panel panel border border-primary mb-4 rounded-top d-flex flex-column panel-default card-default\\"><div class=\\"panel-heading clearfix bg-primary text-white\\">Comments <!--v-if--><!--v-if--></div><!--v-if--><!--v-if--></div></div>
     <div class=\\"comment-count\\" data-url=\\"/api\\" data-v-app=\\"\\"><!--v-if--></div>
     <input name=\\"csrfmiddlewaretoken\\">"
 `;
 
 exports[`mount app on invalid element 1`] = `
-"<div class=\\"comment-viewer\\" data-url=\\"/api\\" data-v-app=\\"\\"><div class=\\"comment-thread panel panel-default\\"><div class=\\"panel-heading clearfix\\">Comments  (0) <button class=\\"btn btn-default btn-sm pull-right\\">sort <i class=\\"fas fa-sort-down\\"></i></button></div><!--v-if--></div></div>
+"<div class=\\"comment-thread-viewer\\" data-url=\\"/api\\" data-v-app=\\"\\"><div class=\\"comment-panel panel border border-primary mb-4 rounded-top d-flex flex-column panel-default card-default\\"><div class=\\"panel-heading clearfix bg-primary text-white\\">Comments  (0) <button class=\\"btn btn-default p-2 px-3 btn-sm pull-right float-end\\">sort <i class=\\"fas fa-sort-down\\"></i></button></div><!--v-if--><!--v-if--></div></div>
     <input name=\\"csrfmiddlewaretoken\\">"
 `;

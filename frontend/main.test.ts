@@ -26,7 +26,7 @@
 
 import {vi, expect, test, beforeEach} from 'vitest';
 import * as exports from '@vue/runtime-dom';
-import CommentThread from "./CommentThread.vue";
+import CommentViewer from "./CommentViewer.vue";
 import {createApp} from "vue";
 import fetchMock from "fetch-mock";
 
@@ -41,6 +41,27 @@ beforeEach(() => {
 });
 
 test('mount app', async () => {
+  document.body.innerHTML = `<div class="comment-thread-viewer" data-url="/api"></div>
+    <div class="comment-count" data-url="/api"></div>
+    <input name="csrfmiddlewaretoken"/>`;
+
+  const spy = vi.spyOn(exports, 'createApp').mockImplementation(createApp);
+
+  // Executes main file
+  await import('./main');
+
+  expect(document.body.innerHTML).toMatchSnapshot();
+  const pElement = document.querySelector('[data-v-app]');
+  expect(pElement).toBeTruthy();
+
+  expect(spy).toHaveBeenCalledWith(CommentViewer, {
+    url: '/api',
+    singleMode: false,
+  });
+});
+
+
+test('mount app in single mode', async () => {
   document.body.innerHTML = `<div class="comment-viewer" data-url="/api"></div>
     <div class="comment-count" data-url="/api"></div>
     <input name="csrfmiddlewaretoken"/>`;
@@ -54,14 +75,15 @@ test('mount app', async () => {
   const pElement = document.querySelector('[data-v-app]');
   expect(pElement).toBeTruthy();
 
-  expect(spy).toHaveBeenCalledWith(CommentThread, {
+  expect(spy).toHaveBeenCalledWith(CommentViewer, {
     url: '/api',
+    singleMode: true,
   });
 });
 
 
 test('mount app on invalid element', async () => {
-  document.body.innerHTML = `<div class="comment-viewer" data-url="/api"></div>
+  document.body.innerHTML = `<div class="comment-thread-viewer" data-url="/api"></div>
     <input name="csrfmiddlewaretoken"/>`;
 
   const spy = vi.spyOn(exports, 'createApp').mockImplementation(createApp);
@@ -73,15 +95,16 @@ test('mount app on invalid element', async () => {
   const pElement = document.querySelector('[data-v-app]');
   expect(pElement).toBeTruthy();
 
-  expect(spy).toHaveBeenCalledWith(CommentThread, {
+  expect(spy).toHaveBeenCalledWith(CommentViewer, {
     url: '/api',
+    singleMode: false,
   });
 });
 
 
 test('correct conversions', async () => {
   document.body.innerHTML = `
-    <div class="comment-viewer"
+    <div class="comment-thread-viewer"
       data-url="/api"
       data-page-size="2"
       data-tags="foo,bar"
@@ -92,8 +115,9 @@ test('correct conversions', async () => {
 
   // Executes main file
   await import('./main');
-  expect(spy).toHaveBeenCalledWith(CommentThread, {
+  expect(spy).toHaveBeenCalledWith(CommentViewer, {
     url: '/api',
+    singleMode: false,
     "pageSize": 2,
     "tags": [
       "foo",

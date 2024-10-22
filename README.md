@@ -94,7 +94,9 @@ urlpatterns = [
 ]
 ```
 
-Then to render the widget for an object, include the CSS and JS file while adding a `div.comment-viewer` element to your DOM:
+Then to render the widget for an object, include the CSS and JS file while adding a :
+- `div.comment-viewer` element to your DOM if you want to display one comment (simple view).
+- `div.comment-thread-viewer` element to your DOM if you want to display a paginated list of all comments (thread view).
 
 ```html
 {% block style %}
@@ -102,7 +104,10 @@ Then to render the widget for an object, include the CSS and JS file while addin
 {% endblock style %}
 
 {% block content %}
+  <!-- Simple view -->
   <div class="comment-viewer" data-url="{% url 'some-test' object.uuid %}"></div>
+  <!-- Thread view -->
+  <div class="comment-thread-viewer" data-url="{% url 'some-test' object.uuid %}"></div>
 {% endblock %}
 
 {% block script %}

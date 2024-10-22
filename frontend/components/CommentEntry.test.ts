@@ -112,7 +112,7 @@ test('entry editing', async () => {
   expect(wrapper.findComponent({name: 'CommentEditor'}).exists()).toBe(true);
 
   await wrapper.find('button.btn-primary').trigger('click');
-  expect(wrapper.emitted('edit')).toEqual([[apiUrl, comment]]);
+  expect(wrapper.emitted('edit')).toEqual([[apiUrl, comment, expect.any(Function)]]);
 });
 
 test('entry editing cancel', async () => {
@@ -134,4 +134,20 @@ test('entry deletion', async () => {
 
   await wrapper.find('button.btn-danger').trigger('click');
   expect(wrapper.emitted('delete')).toEqual([[apiUrl]]);
+});
+
+test('entry authoring', () => {
+  const wrapperWithoutPrefix = mount(CommentEntry, {
+    props: {entry: new Entry(entryData), withLastUpdateByPrefix: false},
+  });
+
+  expect(wrapperWithoutPrefix.find('.comment-authoring').text()).toBe('John Doe entry.authored_date');
+
+  const wrapperWithPrefix= mount(CommentEntry, {
+    props: {entry: new Entry(entryData), withLastUpdateByPrefix: true},
+  });
+
+  expect(wrapperWithPrefix.find('.comment-authoring').text()).toBe(
+    'entry.last_update_by John Doe entry.authored_date',
+  );
 });

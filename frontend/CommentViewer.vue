@@ -26,15 +26,16 @@
 
 <template>
   <div
-      class="comment-thread panel border border-primary mb-4 rounded-top d-flex flex-column"
+      class="comment-panel panel border border-primary mb-4 rounded-top d-flex flex-column"
       :class="`panel-${panelClass} card-${panelClass}`"
   >
     <div class="panel-heading clearfix bg-primary text-white">
       {{ headerTitle || $t('thread.title') }}
-      <template v-if="total != null">
+      <template v-if="total != null && !singleMode">
         ({{ total }})
       </template>
       <button
+          v-if="!singleMode"
           class="btn btn-default p-2 px-3 btn-sm pull-right float-end"
           @click="changeSort()"
       >
@@ -50,7 +51,7 @@
         class="spinner"
     />
     <div
-        v-else-if="error"
+        v-if="error"
         class="panel-body card-body pb-0 text-danger"
     >
       {{ error }}
@@ -61,6 +62,7 @@
         :key="entry.uuid"
         :entry="entry"
         :rich-text-config="richTextConfig"
+        :with-last-update-by-prefix="singleMode"
         @edit="editEntry"
         @delete="deleteEntry"
     />
@@ -69,7 +71,7 @@
         class="panel-body card-body pb-3"
     >
       <button
-          v-if="previousPage"
+          v-if="previousPage && !singleMode"
           class="btn btn-sm btn-default"
           @click="previousPage && (currentUrl = previousPage); loadEntries()"
       >
@@ -77,7 +79,7 @@
         {{ $t('thread.previous') }}
       </button>
       <button
-          v-if="nextPage"
+          v-if="nextPage && !singleMode"
           class="btn btn-sm btn-default"
           @click="nextPage && (currentUrl = nextPage); loadEntries()"
       >
@@ -114,7 +116,7 @@ import EventBus from './event-bus';
 import {defineComponent} from "vue";
 
 export default defineComponent({
-  name: 'CommentThread',
+  name: 'CommentViewer',
   components: {CommentEditor, CommentEntry},
   props: {
     url: {
@@ -145,12 +147,21 @@ export default defineComponent({
       type: Object,
       default: () => undefined,
     },
+    singleMode: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
-    const params = new URLSearchParams({
-      limit: String(this.pageSize),
-      sort: '-modified_at',
-    });
+    const params = new URLSearchParams(this.singleMode
+        ? {
+          last: '1',
+        }
+        : {
+          limit: String(this.pageSize),
+          sort: '-modified_at',
+        },
+    );
     if (this.tags.length) {
       params.append('tags', this.tags.join(','));
     }
@@ -192,7 +203,7 @@ export default defineComponent({
     async loadEntries() {
       const data = (await this.doRequest(this.currentUrl, {}, false)) as EntriesResponse;
       if (data) {
-        this.createUrl = typeof data.create === 'string' ? data.create : null;
+        this.createUrl = typeof data.create === 'string' && (!this.singleMode || data.results.length === 0) ? data.create : null;
         this.previousPage = data.previous;
         this.nextPage = data.next;
         this.total = data.count;
@@ -206,11 +217,11 @@ export default defineComponent({
       });
       this.isAdding = false;
     },
-    async editEntry(url: string, value: string) {
+    async editEntry(url: string, value: string, callback: () => void) {
       await this.doRequest(url, {
         method: 'PUT',
         body: JSON.stringify({comment: value}),
-      });
+      }).then(callback);
     },
     async deleteEntry(url: string) {
       await this.doRequest(url, {method: 'DELETE'});
@@ -247,7 +258,7 @@ export default defineComponent({
 </script>
 
 <style>
-.comment-thread .panel-heading {
+.comment-panel .panel-heading {
   line-height: 30px;
 }
 </style>

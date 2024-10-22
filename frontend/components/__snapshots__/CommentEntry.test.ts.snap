@@ -1,10 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`entry 1`] = `
-"<div class=\\"panel-body clearfix\\">
-  <div class=\\"comment-authoring\\"><strong>John Doe</strong> entry.authored_date</div>
-  <div class=\\"pull-right comment-actions\\"><button class=\\"btn btn-sm btn-primary\\" title=\\"entry.edit_comment\\"><i class=\\"fas fa-pencil\\"></i></button><button class=\\"btn btn-sm btn-danger\\" title=\\"entry.delete_comment\\"><i class=\\"fas fa-times\\"></i></button></div>
-  <div class=\\"comment-content\\">
+"<div class=\\"panel-body card-body pb-0 clearfix\\">
+  <div class=\\"comment-authoring\\">
+    <!--v-if--><strong>John Doe</strong> entry.authored_date
+  </div>
+  <div class=\\"pull-right float-end comment-actions\\"><button class=\\"btn btn-sm btn-primary\\" title=\\"entry.edit_comment\\"><i class=\\"fas fa-pencil fs-6\\"></i></button><button class=\\"btn btn-sm btn-danger\\" title=\\"entry.delete_comment\\"><i class=\\"fas fa-times fs-6\\"></i></button></div>
+  <div class=\\"comment-content pb-0\\">
     <!-- eslint-disable vue/no-v-html -->
     <p>Lorem ipsum dolor amet<br>Nope</p>
   </div>
@@ -12,9 +14,11 @@ exports[`entry 1`] = `
 `;
 
 exports[`entry rich text 1`] = `
-"<div class=\\"panel-body clearfix\\">
-  <div class=\\"comment-authoring\\"><strong>John Doe</strong> entry.authored_date</div>
-  <div class=\\"pull-right comment-actions\\"><button class=\\"btn btn-sm btn-primary\\" title=\\"entry.edit_comment\\"><i class=\\"fas fa-pencil\\"></i></button><button class=\\"btn btn-sm btn-danger\\" title=\\"entry.delete_comment\\"><i class=\\"fas fa-times\\"></i></button></div><!-- eslint-disable vue/no-v-html -->
+"<div class=\\"panel-body card-body pb-0 clearfix\\">
+  <div class=\\"comment-authoring\\">
+    <!--v-if--><strong>John Doe</strong> entry.authored_date
+  </div>
+  <div class=\\"pull-right float-end comment-actions\\"><button class=\\"btn btn-sm btn-primary\\" title=\\"entry.edit_comment\\"><i class=\\"fas fa-pencil fs-6\\"></i></button><button class=\\"btn btn-sm btn-danger\\" title=\\"entry.delete_comment\\"><i class=\\"fas fa-times fs-6\\"></i></button></div><!-- eslint-disable vue/no-v-html -->
   <div class=\\"comment-content\\">
     <p>Lorem ipsum <strong>dolor</strong> amet</p>
     <p>Nope</p>

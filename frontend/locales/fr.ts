@@ -36,6 +36,7 @@ export default  {
     anonymous: 'Anonyme',
     authored_date: 'le {date} à {time}',
     edit_comment: 'Modifier',
+    last_update_by: 'Dernière mise à jour par',
     save_comment: "Enregistrer",
     delete_comment: 'Supprimer',
     cancel_edit: 'Annuler',

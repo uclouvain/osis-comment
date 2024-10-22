@@ -26,7 +26,7 @@
 
 import {beforeEach, expect, test} from 'vitest';
 import {flushPromises, mount} from '@vue/test-utils';
-import CommentThread from "./CommentThread.vue";
+import CommentViewer from "./CommentViewer.vue";
 import type {EntriesResponse} from "./interfaces";
 import fetchMock from "fetch-mock";
 import CommentEditor from "./components/CommentEditor.vue";
@@ -90,19 +90,19 @@ beforeEach(() => {
   fetchMock.reset().mock('path:' + apiUrl, mockEntries);
 });
 
-test('thread wihout token', () => {
+test('thread without token', () => {
   (document.getElementById('csrf-token') as Element).remove();
 
-  expect(() => mount(CommentThread, {
-    props: {url: apiUrl},
+  expect(() => mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
   })).toThrowError('Please include {% csrf_token %} in your page.');
 });
 
 test('thread', async () => {
-  expect(CommentThread).toBeTruthy();
+  expect(CommentViewer).toBeTruthy();
 
-  const wrapper = mount(CommentThread, {
-    props: {url: apiUrl},
+  const wrapper = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
   });
   await flushPromises();
   expect(wrapper.html()).toMatchSnapshot();
@@ -112,7 +112,7 @@ test('thread', async () => {
 test('handle 404', async () => {
   fetchMock.reset().mock('path:' + apiUrl, 404);
 
-  const wrapper = mount(CommentThread, {
+  const wrapper = mount(CommentViewer, {
     props: {url: apiUrl},
   });
 
@@ -124,8 +124,8 @@ test('handle 404', async () => {
 test('handle network error', async () => {
   fetchMock.reset().mock('path:' + apiUrl, {throws: new Error('Some network error')});
 
-  const wrapper = mount(CommentThread, {
-    props: {url: apiUrl},
+  const wrapper = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
   });
 
   await flushPromises();
@@ -134,8 +134,8 @@ test('handle network error', async () => {
 });
 
 test('change sort', async () => {
-  const wrapper = mount(CommentThread, {
-    props: {url: apiUrl},
+  const wrapper = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
   });
 
   await flushPromises();
@@ -153,6 +153,110 @@ test('change sort', async () => {
   expect(sortButton.get('i').classes()).toContain('fa-sort-down');
 });
 
+test('single mode', async () => {
+  const previousUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at&page=1';
+  const nextUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at&page=3';
+
+  const sortButton = '.panel-heading .btn';
+  const previousButton = '.btn-default .fa-chevron-left';
+  const nextButton = '.btn-default .fa-chevron-right';
+  const createButton = '.btn-primary .fa-plus';
+
+  fetchMock.reset().mock('path:' + apiUrl, {
+    ...mockEntries,
+    previous: previousUrl,
+    next: nextUrl,
+  });
+
+  const singleWrapperWithEntry = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: true},
+  });
+
+  await flushPromises();
+  expect(fetchMock.lastUrl()).toBe('/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?last=1');
+
+  [sortButton, previousButton, nextButton, createButton].forEach((selector) => {
+    expect(singleWrapperWithEntry.find(selector).exists()).toBe(false);
+  });
+
+  expect(singleWrapperWithEntry.find('.panel-heading').text()).toBe('thread.title');
+
+  expect(
+      singleWrapperWithEntry.find('.comment-authoring').text()).toBe(
+      'entry.last_update_by John Doe entry.authored_date',
+  );
+
+  fetchMock.reset().mock('path:' + apiUrl, {
+    ...mockEntries,
+    results: [],
+  });
+
+  const singleWrapperWithoutEntry = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: true},
+  });
+
+  await flushPromises();
+
+  [sortButton, previousButton, nextButton].forEach((selector) => {
+    expect(singleWrapperWithoutEntry.find(selector).exists()).toBe(false);
+  });
+
+  expect(singleWrapperWithoutEntry.find(createButton).exists()).toBe(true);
+});
+
+test('thread mode', async () => {
+  const previousUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at&page=1';
+  const nextUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at&page=3';
+
+  const sortButton = '.panel-heading .btn';
+  const previousButton = '.btn-default .fa-chevron-left';
+  const nextButton = '.btn-default .fa-chevron-right';
+  const createButton = '.btn-primary .fa-plus';
+
+  fetchMock.reset().mock('path:' + apiUrl, {
+    ...mockEntries,
+    previous: previousUrl,
+    next: nextUrl,
+  });
+
+  const threadWrapperWithEntries = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
+  });
+
+  await flushPromises();
+  expect(fetchMock.lastUrl()).toBe('/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at');
+
+  [sortButton, previousButton, nextButton, createButton].forEach((selector) => {
+    expect(threadWrapperWithEntries.find(selector).exists()).toBe(true);
+  });
+
+  expect(threadWrapperWithEntries.find('.panel-heading').text()).toBe('thread.title  (3) thread.sort');
+
+  expect(
+      threadWrapperWithEntries.find('.comment-authoring').text()).toBe(
+      'John Doe entry.authored_date',
+  );
+
+  fetchMock.reset().mock('path:' + apiUrl, {
+    ...mockEntries,
+    results: [],
+  });
+
+  const threadWrapperWithoutEntries = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
+  });
+
+  await flushPromises();
+
+  [previousButton, nextButton].forEach((selector) => {
+    expect(threadWrapperWithoutEntries.find(selector).exists()).toBe(false);
+  });
+
+  [sortButton, createButton].forEach((selector) => {
+    expect(threadWrapperWithoutEntries.find(selector).exists()).toBe(true);
+  });
+});
+
 test('handle pagination', async () => {
   const previousUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at&page=1';
   const nextUrl = '/api/dac97c6d-ddb9-47cf-bf72-913fa0ebbbfd/?limit=10&sort=-modified_at&page=3';
@@ -162,8 +266,8 @@ test('handle pagination', async () => {
     next: nextUrl,
   });
 
-  const wrapper = mount(CommentThread, {
-    props: {url: apiUrl},
+  const wrapper = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
   });
 
   await flushPromises();
@@ -176,8 +280,8 @@ test('handle pagination', async () => {
 });
 
 test('add comment', async () => {
-  const wrapper = mount(CommentThread, {
-    props: {url: apiUrl, tags: ['foo']},
+  const wrapper = mount(CommentViewer, {
+    props: {url: apiUrl, tags: ['foo'], singleMode: false},
   });
 
   await flushPromises();
@@ -198,8 +302,8 @@ test('add comment', async () => {
 });
 
 test('cancel adding comment', async () => {
-  const wrapper = mount(CommentThread, {
-    props: {url: apiUrl},
+  const wrapper = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
   });
 
   await flushPromises();
@@ -212,8 +316,8 @@ test('cancel adding comment', async () => {
 });
 
 test('edit comment', async () => {
-   const wrapper = mount(CommentThread, {
-    props: {url: apiUrl},
+   const wrapper = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
   });
 
   await flushPromises();
@@ -243,8 +347,8 @@ test('edit comment', async () => {
 
 test('delete comment', async () => {
 
-   const wrapper = mount(CommentThread, {
-    props: {url: apiUrl},
+   const wrapper = mount(CommentViewer, {
+    props: {url: apiUrl, singleMode: false},
   });
 
   await flushPromises();
